@@ -1,6 +1,8 @@
 import random
 import math
 import os
+import platform
+import time
 
 user_plays = []
 ai_plays = []
@@ -14,15 +16,15 @@ def make_board():
         board[i] += [['*'],['*'],['*']]
     return board
 
-def getstep(board, user_plays, ai_plays):
-    step = ai_plays[-1]
-    xcoor = int(step[0])
-    ycoor = int(step[2])
-    choose = getrand(0, 1)
-    if choose = 0:
-        xcoor += 1
-        ycoor += 1
-        
+# def getstep(board, user_plays, ai_plays):
+#     step = ai_plays[-1]
+#     xcoor = int(step[0])
+#     ycoor = int(step[2])
+#     choose = getrand(0, 1)
+#     if choose = 0:
+#         xcoor += 1
+#         ycoor += 1
+
 
 def Print_board(board):
     count = 0
@@ -46,6 +48,10 @@ def Playchance(board, usery, userx, computer, ai_plays, user_plays):
     ai_plays += [ai_chan, ]
     update(ycoord, xcoord, board, computer)
 
+def getplat():
+    return platform.system()
+
+platform = getplat()
 board = make_board()
 Print_board(board)
 char = input("Enter the charcacter you wish to use(choose x or 0) : ")
@@ -55,7 +61,7 @@ if char.lower() == "x":
 else:
     computer = "x"
 print("The computer will be using " ,computer)
-print("Your chance firs, use coordinates to refernace positions. The top left place is (1, 1)(y,x)")
+print("Your chance firs, use coordinates to refernace positions. The top left place is (0, 0)(y,x)")
 
 while True:
     print("User_plays is ", user_plays)
@@ -72,6 +78,10 @@ while True:
             coord += [i, ]
     print(coord)
     board = update(int(coord[1]), int(coord[0]), board, char)
-    os.system("clear")
+    if platform.lower() == 'windows':
+        os.system("cls")
+    else:
+        os.system("clear")
+    time.sleep(0.5)
     Playchance(board, int(coord[1]), int(coord[0]), computer, ai_plays, user_plays)
     Print_board(board)
