@@ -16,15 +16,16 @@ def make_board():
         board[i] += [['*'],['*'],['*']]
     return board
 
-# def getstep(board, user_plays, ai_plays):
-#     step = ai_plays[-1]
-#     xcoor = int(step[0])
-#     ycoor = int(step[2])
-#     choose = getrand(0, 1)
-#     if choose = 0:
-#         xcoor += 1
-#         ycoor += 1
-
+def getstep(board, user_plays, ai_plays):
+    step = ai_plays[-1]
+    xcoor = int(step[0])
+    ycoor = int(step[2])
+    choose = getrand(0, 1)
+    if choose == 0:
+        xcoor += 1
+        ycoor += 1
+    best = str(xcoor) + ',' + str(ycoor)
+    return best
 
 def Print_board(board):
     count = 0
