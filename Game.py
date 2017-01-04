@@ -1,6 +1,8 @@
 import random
 import math
 import os
+import platform
+import time
 
 def getrand(min, max):
     return random.randint(min, max)
@@ -30,6 +32,10 @@ def Playchance(board, usery, userx, computer):
         xcoord = getrand(0, 2)
     update(ycoord, xcoord, board, computer)
 
+def getplat():
+    return platform.system()
+
+platform = getplat()
 board = make_board()
 Print_board(board)
 char = input("Enter the charcacter you wish to use(choose x or 0) : ")
@@ -48,6 +54,10 @@ while True:
             coord += [i, ]
     print(coord)
     board = update(int(coord[1]), int(coord[0]), board, char)
-    os.system("clear")
+    if platform.lower() == 'windows':
+        os.system("cls")
+    else:
+        os.system("clear")
+    time.sleep(0.5)
     Playchance(board, int(coord[1]), int(coord[0]), computer)
     Print_board(board)
