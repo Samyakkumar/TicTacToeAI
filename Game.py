@@ -45,7 +45,7 @@ if char.lower() == "x":
 else:
     computer = "x"
 print("The computer will be using " ,computer)
-print("Your chance firs, use coordinates to refernace positions. The top left place is (1, 1)(y,x)")
+print("Your chance firs, use coordinates to refernace positions. The top left place is (0, 0)(y,x)")
 while True:
     user_chance = input("Enter the coordinates")
     coord = []
