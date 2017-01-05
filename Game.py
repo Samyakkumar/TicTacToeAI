@@ -46,7 +46,12 @@ def getempty(possible, ui ,ai):
 def update(y, x, board, change):
     board[x][y] = change
     return board
-#Temp function that plays a random chance
+#Get the char at a position
+def getcharat(board, coord):
+	xcoord = int(coord[0])
+	ycoord = int(coord[2])
+	return board[xcoord][ycoord]
+# function that plays a  chance
 def Playchance(board, computer, coord, ai_plays):
     xcoord = int(coord[0])
     ycoord = int(coord[2])
@@ -126,7 +131,7 @@ def dleft(board, coord):
     else:
         return board[xcoord][ycoord]
 
-def getsurrouunding(i):
+def getsurrouunding(i, board):
             coor = i
             xoor = int(i[0])
             ycoor = int(i[2])
@@ -136,15 +141,15 @@ def getsurrouunding(i):
             lefter = left(board, coor)
             drighter = dright(board, coor)
             dlefter = dleft(board, coor)
-            surrounding = [uper, downer, righter, lefter, drighter, dlefter]
+            surrounding = [uper,  righter, downer, lefter, drighter, dlefter]
             return surrounding
 #Get the next best step
 def getstep(board,  empty, char):
-    best = empty[0]
+    best = empty[getrand(0, len(empty)-1)]
     highest = 0
     for i in empty:
         counter = 0
-        surrounding = getsurrouunding(i)
+        surrounding = getsurrouunding(i, board)
         for k in surrounding:
             if k == char:
                 counter += 1
@@ -152,7 +157,45 @@ def getstep(board,  empty, char):
             highest = counter
             best = i
     return best
-possible1 = []
+#Evaluate board for winners
+def evaluate(board, user_char, computer_char, possible):
+	cwin = False
+	uwin = False
+	y = 0
+	while y < len(possible):
+		coord = possible[y]
+		ycoord = int(possible[y][0])
+		xcoord = int(possible[y][2])
+		surround = getsurrouunding(coord, board)
+		charat = getcharat(board, coord)
+		print("Coord is ", coord)
+		print("Surround is ", surround)
+		print("Charat is ", charat)
+		y += 1
+		if "*" in charat:
+			continue
+		else:
+			if surround[0] == charat and surround[2] == charat:
+				if charat == user_char:
+					uwin = True
+				elif charat == computer_char:
+					cwin = True
+				break
+			if surround[4] == charat and surround[5] == charat:
+				if charat == user_char:
+					uwin = True
+				elif charat == computer_char:
+					cwin = True
+				break
+			if surround[1] == charat and surround[3] == charat:
+				if charat == user_char:
+					uwin = True
+				elif charat == computer_char:
+					cwin = True
+				break
+	return [uwin, cwin]
+
+#Functions over the rest of the code calling the functions is below
 platform = getplat()
 board = make_board()
 possible = init_possible(board, possible)
@@ -164,7 +207,7 @@ if char.lower() == "x":
 else:
     computer = "x"
 print("The computer will be using " ,computer)
-print("Your chance firs, use coordinates to refernace positions. The top left place is (0, 0)(y,x)")
+print("Your chance firs, use coordinates to refernace positions. The top left place is (0, 0) -> (y,x)")
 count = 0
 while True:
     user_chance = input("Enter the coordinates")
@@ -174,7 +217,7 @@ while True:
         user_chance = input("Enter valid coordinates")
 
     user_plays += [user_chance, ]
-
+    
     print(dright(board, user_plays[count]))
     empty = getempty(possible, user_plays, ai_plays)
     print("Empty is ", empty)
@@ -188,8 +231,9 @@ while True:
 
     print(coord)
     empty = getempty(possible, user_plays, ai_plays)
-
     board = update(int(coord[1]), int(coord[0]), board, char)
+    print("Char at is", getcharat(board, user_chance))
+    time.sleep(2)
     if platform.lower() == 'windows':
         os.system("cls")
     else:
@@ -198,4 +242,11 @@ while True:
     Playchance(board, computer, bstep, ai_plays)
     # Playchance(board, int(coord[1]), int(coord[0]), computer, ai_plays, user_plays)
     Print_board(board)
+    Ans = evaluate(board,char, computer, possible)
+    if Ans[0] == True:
+    	print("User won!!")
+    	break
+    elif Ans[1] == True:
+    	print("The AI won!!")
+    	break
     count += 1
